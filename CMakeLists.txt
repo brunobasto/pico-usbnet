@@ -39,6 +39,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${PICO_TINYUSB_PATH}/lib/networking
     ${CMAKE_CURRENT_SOURCE_DIR}/include/tusb
     ${CMAKE_CURRENT_SOURCE_DIR}/include/usbnet
+    $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(${PROJECT_NAME}
