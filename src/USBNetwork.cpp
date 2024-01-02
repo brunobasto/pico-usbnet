@@ -1,4 +1,4 @@
-#include "USBNetwork.h"
+#include "pico-usbnet/USBNetwork.h"
 
 struct pbuf* USBNetwork::received_frame = nullptr;
 

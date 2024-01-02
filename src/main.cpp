@@ -2,8 +2,8 @@
 #include "hardware/adc.h"
 #include "math.h"
 
-#include "USBNetwork.h"
-#include "TCP.h"
+#include "pico-usbnet/USBNetwork.h"
+#include "pico-usbnet/TCP.h"
 
 #define LED_PIN 25
 

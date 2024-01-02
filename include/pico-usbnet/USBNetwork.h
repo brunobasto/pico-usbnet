@@ -2,7 +2,8 @@
 #define PICONET_MANAGER_H
 #include <vector>
 
-extern "C" {
+extern "C"
+{
 // HIPPY FIX
 #include "dhserver.h"
 #include "dnserver.h"
@@ -15,14 +16,14 @@ extern "C" {
 #include "tusb.h"
 }
 
-class USBNetwork {
+class USBNetwork
+{
 public:
     USBNetwork(
-        const ip_addr_t& ipaddr,
-        const ip_addr_t& netmask,
-        const ip_addr_t& gateway,
-        const std::vector<dhcp_entry_t>& dhcpEntries = std::vector<dhcp_entry_t>()
-    );
+        const ip_addr_t &ipaddr,
+        const ip_addr_t &netmask,
+        const ip_addr_t &gateway,
+        const std::vector<dhcp_entry_t> &dhcpEntries = std::vector<dhcp_entry_t>());
     void init();
     void waitForNetworkUp();
     void startDhcpServer();
@@ -31,7 +32,7 @@ public:
     // TinyUSB network callback handlers
     static void networkInitHandler();
     static bool networkReceiveHandler(const uint8_t *src, uint16_t size);
-    static uint16_t networkTransmitHandler(uint8_t *dst, void* ref, uint16_t size);
+    static uint16_t networkTransmitHandler(uint8_t *dst, void *ref, uint16_t size);
 
 private:
     void serviceTraffic();
@@ -49,10 +50,10 @@ private:
 
     static struct pbuf *received_frame;
     // Link output function for lwIP
-    static err_t linkoutput_fn(struct netif* netif, struct pbuf* p);
+    static err_t linkoutput_fn(struct netif *netif, struct pbuf *p);
     // Standard output function for lwIP
-    static err_t output_fn(struct netif* netif, struct pbuf* p, const ip_addr_t* addr);
-    static err_t netifInitCallback(struct netif* netif);
+    static err_t output_fn(struct netif *netif, struct pbuf *p, const ip_addr_t *addr);
+    static err_t netifInitCallback(struct netif *netif);
 };
 
 #endif // PICONET_MANAGER_H
