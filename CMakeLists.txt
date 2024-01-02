@@ -18,45 +18,36 @@ set(PICO_TINYUSB_PATH ${PICO_SDK_PATH}/lib/tinyusb)
 # LWIP
 set(LWIP_DIR ${PICO_SDK_PATH}/lib/lwip)
 set (LWIP_INCLUDE_DIRS
-    "${LWIP_DIR}/src/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}"
+    ${LWIP_DIR}/src/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lwip
 )
 include(${LWIP_DIR}/src/Filelists.cmake)
 
-add_executable(${PROJECT_NAME}
+add_library(${PROJECT_NAME}
     ${PICO_TINYUSB_PATH}/lib/networking/dhserver.c
     ${PICO_TINYUSB_PATH}/lib/networking/rndis_reports.c
-    USBNetwork.cpp
-    TCP.cpp
-    UDP.cpp
-    usb_descriptors.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/USBNetwork.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/TCP.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/UDP.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/usb_descriptors.c
 )
 
-pico_enable_stdio_usb(${PROJECT_NAME} 0)
-pico_enable_stdio_uart(${PROJECT_NAME} 0)
-
 target_include_directories(${PROJECT_NAME} PUBLIC
-    ${LWIP_INCLUDE_DIRS}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  # Path to your library's public headers
+    ${LWIP_INCLUDE_DIRS}  # LWIP include directories
     ${PICO_TINYUSB_PATH}/src
     ${PICO_TINYUSB_PATH}/lib/networking
-    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME}
-    hardware_adc
-    pico_stdlib
-    pico_unique_id
-    pico_lwip
-    pico_lwip_arch
-    tinyusb_device
-    tinyusb_board
-    pico_stdlib
-    pico_unique_id
-    tinyusb_device
     lwipallapps
     lwipcore
+    pico_lwip
+    pico_lwip_arch
+    pico_stdlib
+    pico_unique_id
+    tinyusb_board
+    tinyusb_device
 )
 
 pico_add_extra_outputs(${PROJECT_NAME})
-
-target_compile_definitions(${PROJECT_NAME} PRIVATE PICO_ENTER_USB_BOOT_ON_EXIT=1)
