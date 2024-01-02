@@ -53,4 +53,4 @@ target_link_libraries(${PROJECT_NAME}
     tinyusb_device
 )
 
-pico_add_extra_outputs(${PROJECT_NAME})
+# pico_add_extra_outputs(${PROJECT_NAME})
