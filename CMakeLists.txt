@@ -35,7 +35,7 @@ add_executable(${PROJECT_NAME}
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
 pico_enable_stdio_uart(${PROJECT_NAME} 0)
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+target_include_directories(${PROJECT_NAME} PUBLIC
     ${LWIP_INCLUDE_DIRS}
     ${PICO_TINYUSB_PATH}/src
     ${PICO_TINYUSB_PATH}/lib/networking
