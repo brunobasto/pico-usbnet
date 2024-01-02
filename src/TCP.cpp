@@ -59,7 +59,15 @@ err_t TCP::send(const void *data, uint16_t len) {
 
 err_t TCP::send() {
     // Flush the data sent (actually send the TCP segment)
-    return tcp_output(pcb);
+    err_t error = tcp_output(pcb);
+
+    if (error != ERR_OK) {
+        if (this->errorCallback) {
+            this->errorCallback(error);
+        }
+    }
+
+    return error;
 }
 
 err_t TCP::write(const void *data, uint16_t len) {
@@ -71,7 +79,10 @@ err_t TCP::write(const void *data, uint16_t len) {
     err_t result = tcp_write(pcb, data, len, TCP_WRITE_FLAG_COPY);
 
     if (result != ERR_OK) {
-        // Handle error or return the error code
+        if (this->errorCallback) {
+            this->errorCallback(result);
+        }
+
         return result;
     }
 
