@@ -37,6 +37,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${LWIP_INCLUDE_DIRS}  # LWIP include directories
     ${PICO_TINYUSB_PATH}/src
     ${PICO_TINYUSB_PATH}/lib/networking
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/tusb
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/usbnet
 )
 
 target_link_libraries(${PROJECT_NAME}
