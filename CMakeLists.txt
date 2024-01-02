@@ -33,8 +33,8 @@ add_library(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  # Path to your library's public headers
-    ${LWIP_INCLUDE_DIRS}  # LWIP include directories
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    ${LWIP_INCLUDE_DIRS}
     ${PICO_TINYUSB_PATH}/src
     ${PICO_TINYUSB_PATH}/lib/networking
     ${CMAKE_CURRENT_SOURCE_DIR}/include/tusb
@@ -52,5 +52,3 @@ target_link_libraries(${PROJECT_NAME}
     tinyusb_board
     tinyusb_device
 )
-
-# pico_add_extra_outputs(${PROJECT_NAME})
