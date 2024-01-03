@@ -110,6 +110,10 @@ void TCP::onAccept(void (*callback)(struct tcp_pcb *newpcb, err_t err)) {
     acceptCallback = callback;
 }
 
+void TCP::onSent(void (*callback)(err_t err)) {
+    sentCallback = callback;
+}
+
 err_t TCP::receiveWrapper(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err) {
     // Assuming arg is an instance of TCP
     TCP *instance = static_cast<TCP*>(arg);
@@ -121,7 +125,7 @@ err_t TCP::receiveWrapper(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t
     }
 
     tcp_recved(tpcb, p->tot_len);
-    tcp_sent(tpcb, NULL);
+    tcp_sent(tpcb, sentWrapper);
 
     // The connection is closed if the client sends "X".
     if (((char*)p->payload)[0] == 'X') {
@@ -178,4 +182,14 @@ void TCP::closeWrapper(void *arg) {
     if (instance && instance->closeCallback) {
         instance->closeCallback();
     }
+}
+
+err_t TCP::sentWrapper(void *arg, struct tcp_pcb *tpcb, u16_t len) {
+    TCP *instance = static_cast<TCP*>(arg);
+
+    if (instance && instance->sentCallback) {
+        instance->sentCallback(ERR_OK);
+    }
+
+    return ERR_OK;
 }
