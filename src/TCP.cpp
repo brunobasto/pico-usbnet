@@ -45,12 +45,6 @@ void TCP::close() {
 }
 
 err_t TCP::send(const void *data, uint16_t len) {
-    uint16_t available = tcp_sndbuf(pcb);
-
-    if (available < len * sizeof(uint8_t)) {
-        return ERR_MEM;
-    }
-
     err_t result = this->write(data, len);    
 
     if (result != ERR_OK) {
@@ -71,11 +65,21 @@ err_t TCP::send() {
     return error;
 }
 
+uint16_t TCP::getAvailableSize() {
+    return tcp_sndbuf(pcb);
+}
+
 err_t TCP::write(const void *data, uint16_t len) {
     if (!pcb) {
         errorWrapper(this, ERR_CONN);
 
         return ERR_CONN; // No valid connection
+    }
+
+    uint16_t available = this->getAvailableSize();
+
+    if (available < len * sizeof(uint8_t)) {
+        return ERR_MEM;
     }
 
     // Try to write the data to the TCP send buffer

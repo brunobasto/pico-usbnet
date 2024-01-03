@@ -16,6 +16,7 @@ public:
     err_t send(const void *data, uint16_t len);
     err_t send();
     err_t write(const void *data, uint16_t len);
+    uint16_t getAvailableSize();
 
     // Callback setters
     void onAccept(void (*callback)(struct tcp_pcb *newpcb, err_t err));
