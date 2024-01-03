@@ -138,7 +138,7 @@ void TCP::errorWrapper(void *arg, err_t err) {
         instance->errorCallback(err);
     }
 
-    if (err != ERR_OK || err != ERR_MEM) {
+    if (err != ERR_OK && err != ERR_MEM) {
         instance->close();
     }
 }
