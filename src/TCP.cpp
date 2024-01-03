@@ -76,11 +76,11 @@ err_t TCP::write(const void *data, uint16_t len) {
         return ERR_CONN; // No valid connection
     }
 
-    uint16_t available = this->getAvailableSize();
+    // uint16_t available = this->getAvailableSize();
 
-    if (available < len * sizeof(uint8_t)) {
-        return ERR_MEM;
-    }
+    // if (available < len * sizeof(uint8_t)) {
+    //     return ERR_MEM;
+    // }
 
     // Try to write the data to the TCP send buffer
     err_t result = tcp_write(pcb, data, len, TCP_WRITE_FLAG_COPY);
