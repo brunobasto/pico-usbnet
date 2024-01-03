@@ -51,10 +51,7 @@ err_t TCP::send(const void *data, uint16_t len) {
         return result;
     }
 
-    // Flush the data sent (actually send the TCP segment)
-    return tcp_output(pcb);
-
-    return result; // Returns ERR_OK if everything went fine
+    return this->send();
 }
 
 err_t TCP::send() {
@@ -103,7 +100,6 @@ void TCP::onAccept(void (*callback)(struct tcp_pcb *newpcb, err_t err)) {
     acceptCallback = callback;
 }
 
-// Implement the static callback wrappers
 err_t TCP::receiveWrapper(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err) {
     // Assuming arg is an instance of TCP
     TCP *instance = static_cast<TCP*>(arg);
