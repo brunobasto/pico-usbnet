@@ -45,6 +45,12 @@ void TCP::close() {
 }
 
 err_t TCP::send(const void *data, uint16_t len) {
+    uint16_t available = tcp_sndbuf(pcb);
+
+    if (available < len * sizeof(uint8_t)) {
+        return ERR_MEM;
+    }
+
     err_t result = this->write(data, len);    
 
     if (result != ERR_OK) {
@@ -132,7 +138,9 @@ void TCP::errorWrapper(void *arg, err_t err) {
         instance->errorCallback(err);
     }
 
-    instance->close();
+    if (err != ERR_OK || err != ERR_MEM) {
+        instance->close();
+    }
 }
 
 err_t TCP::acceptWrapper(void *arg, struct tcp_pcb *newpcb, err_t err) {
