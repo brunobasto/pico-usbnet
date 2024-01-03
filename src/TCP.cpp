@@ -62,9 +62,7 @@ err_t TCP::send() {
     err_t error = tcp_output(pcb);
 
     if (error != ERR_OK) {
-        if (this->errorCallback) {
-            this->errorCallback(error);
-        }
+        errorWrapper(this, error);
     }
 
     return error;
@@ -72,6 +70,8 @@ err_t TCP::send() {
 
 err_t TCP::write(const void *data, uint16_t len) {
     if (!pcb) {
+        errorWrapper(this, ERR_CONN);
+
         return ERR_CONN; // No valid connection
     }
 
@@ -79,9 +79,7 @@ err_t TCP::write(const void *data, uint16_t len) {
     err_t result = tcp_write(pcb, data, len, TCP_WRITE_FLAG_COPY);
 
     if (result != ERR_OK) {
-        if (this->errorCallback) {
-            this->errorCallback(result);
-        }
+        errorWrapper(this, result);
 
         return result;
     }
@@ -111,9 +109,7 @@ err_t TCP::receiveWrapper(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t
     TCP *instance = static_cast<TCP*>(arg);
 
     if (err != ERR_OK && p != NULL) {
-        if (instance && instance->errorCallback) {
-            instance->errorCallback(err);
-        }
+        errorWrapper(instance, err);
 
         return err;
     }
@@ -147,9 +143,7 @@ err_t TCP::acceptWrapper(void *arg, struct tcp_pcb *newpcb, err_t err) {
     TCP *instance = static_cast<TCP*>(arg);
 
     if (err != ERR_OK) {
-        if (instance && instance->errorCallback) {
-            instance->errorCallback(err);
-        }
+        errorWrapper(instance, err);
 
         return err;
     }
